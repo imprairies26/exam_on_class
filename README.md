@@ -1,1 +1,2 @@
 # exam_on_class
+<img width="299" height="664" alt="ảnh" src="https://github.com/user-attachments/assets/b867cd50-2d70-41d8-84b0-88a2e14566c6" />
