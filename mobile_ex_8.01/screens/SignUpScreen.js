@@ -1,0 +1,33 @@
+import { View, StyleSheet, Text, Button } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+export default function SignUpScreen({ navigation }) {
+  return (
+    <SafeAreaView style={styles.safe}>
+          <View style={styles.container}>
+            <Text style={styles.title}>Sign Up</Text>
+            <Button
+              title='Back'
+              onPress={() => navigation.navigate('SignIn')}
+            />
+          </View>
+        </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  safe: {
+    flex: 1,
+    backgroundColor: '#fff'
+  },
+  container: {
+    flex: 1,
+    paddingHorizontal: 24,
+    paddingTop: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  title: {
+    color: 'green',
+  }
+});
