@@ -7,12 +7,16 @@ import VerificationScreen from '../screens/Verification';
 import SelectLocationScreen from '../screens/SelectLocation';
 import LoginScreen from '../screens/LoginScreen';
 import SignUpScreen from '../screens/SignUpScreen';
+import HomeScreen from '../screens/HomeScreen';
+import ProductDetailScreen from '../screens/ProductDetailScreen';
+import ExploreScreen from '../screens/ExploreScreen';
+import BeveragesScreens from '../screens/BeveragesScreens';
 
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
   return (
-    <Stack.Navigator initialRouteName="Splash" screenOptions={{ headerShown: false }}>
+    <Stack.Navigator initialRouteName="Explore" screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Splash" component={SplashScreen} />
       <Stack.Screen name="Onboarding" component={OnbordingScreen} />
       <Stack.Screen name="SignIn" component={SignInScreen} />
@@ -21,6 +25,10 @@ export default function AppNavigator() {
       <Stack.Screen name="SelectLocation" component={SelectLocationScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="SignUp" component={SignUpScreen} />
+      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="ProductDetail" component={ProductDetailScreen} />
+      <Stack.Screen name="Explore" component={ExploreScreen} />
+      <Stack.Screen name="Beverages" component={BeveragesScreens} />
     </Stack.Navigator>
   );
 }

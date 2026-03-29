@@ -46,7 +46,7 @@ export default function LoginScreen({ navigation }) {
                     <View style={{ marginTop: 20 }}>
                         <ButtonComponent 
                             title="Log In" 
-                            onPress={() => navigation.navigate('Splash')} 
+                            onPress={() => navigation.navigate('Home')} 
                         />
                     </View>
 
