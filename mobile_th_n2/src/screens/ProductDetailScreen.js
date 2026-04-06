@@ -1,23 +1,35 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign } from '@expo/vector-icons';
 import ButtonComponent from '../components/ButtonComponent';
-import ShareIcon from '../../assets/icon/share.svg';
+import { useAppContext } from '../context/AppContext';
 import HeartIconGrey from '../../assets/icon/heart-icon-grey.svg';
+import ShareIcon from '../../assets/icon/share.svg';
 import StarIcon from '../../assets/icon/star-icon.svg';
 import NextIcon from '../../assets/icon/next-icon.svg';
+import { TouchableOpacity, Image } from 'react-native';
 
 export default function ProductDetailScreen({ navigation, route }) {
-    const { title, subTitle, price, picture } = route.params || {};
+    const item = route.params || {};
+    const { title, subTitle, price, picture } = item;
     const [isDetailExpanded, setIsDetailExpanded] = useState(false);
+    const [quantity, setQuantity] = useState(1);
+    const { isFavourite, toggleFavourite, addToCart } = useAppContext();
+
+    const favourite = isFavourite(item.id);
+
+    const handleAddToCart = () => {
+        for (let i = 0; i < quantity; i++) {
+            addToCart(item);
+        }
+    };
 
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar barStyle="dark-content" backgroundColor="#F2F3F2" />
             <ScrollView contentContainerStyle={styles.scrollContent} bounces={false}>
-                
-                
+
                 <View style={styles.imageBackground}>
                     <View style={styles.header}>
                         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
@@ -32,27 +44,31 @@ export default function ProductDetailScreen({ navigation, route }) {
                     </View>
                 </View>
 
-                {/* Info Container */}
                 <View style={styles.infoContainer}>
-                    
+
                     <View style={styles.titleRow}>
                         <Text style={styles.title}>{title}</Text>
-                        <TouchableOpacity>
-                            <HeartIconGrey width={24} height={24} />
+                        <TouchableOpacity onPress={() => toggleFavourite(item)}>
+                            <HeartIconGrey
+                                width={24}
+                                height={24}
+                                fill={favourite ? '#F2416B' : 'none'}
+                                stroke={favourite ? '#F2416B' : '#B3B3B3'}
+                            />
                         </TouchableOpacity>
                     </View>
-                    
+
                     <Text style={styles.subTitle}>{subTitle}</Text>
 
                     <View style={styles.priceRow}>
                         <View style={styles.quantityController}>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => setQuantity(q => Math.max(1, q - 1))}>
                                 <AntDesign name="minus" size={24} color="#B3B3B3" />
                             </TouchableOpacity>
                             <View style={styles.quantityBox}>
-                                <Text style={styles.quantityText}>1</Text>
+                                <Text style={styles.quantityText}>{quantity}</Text>
                             </View>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => setQuantity(q => q + 1)}>
                                 <AntDesign name="plus" size={24} color="#53B175" />
                             </TouchableOpacity>
                         </View>
@@ -61,9 +77,8 @@ export default function ProductDetailScreen({ navigation, route }) {
 
                     <View style={styles.divider} />
 
-                    {/* Product Detail Accordion */}
-                    <TouchableOpacity 
-                        style={styles.accordionHeader} 
+                    <TouchableOpacity
+                        style={styles.accordionHeader}
                         onPress={() => setIsDetailExpanded(!isDetailExpanded)}
                         activeOpacity={0.7}
                     >
@@ -72,7 +87,7 @@ export default function ProductDetailScreen({ navigation, route }) {
                             <NextIcon width={8} height={14} />
                         </View>
                     </TouchableOpacity>
-                    
+
                     {isDetailExpanded && (
                         <Text style={styles.accordionContent}>
                             Apples are nutritious. Apples may be good for weight loss. Apples may be good for your heart. As part of a healthful and varied diet.
@@ -80,7 +95,7 @@ export default function ProductDetailScreen({ navigation, route }) {
                     )}
 
                     <View style={styles.divider} />
-                    
+
                     <TouchableOpacity style={styles.accordionHeader} activeOpacity={0.7}>
                         <Text style={styles.accordionTitle}>Nutritions</Text>
                         <View style={styles.rightAccordionArea}>
@@ -90,18 +105,14 @@ export default function ProductDetailScreen({ navigation, route }) {
                             <NextIcon width={8} height={14} />
                         </View>
                     </TouchableOpacity>
-                    
+
                     <View style={styles.divider} />
 
                     <TouchableOpacity style={styles.accordionHeader} activeOpacity={0.7}>
                         <Text style={styles.accordionTitle}>Review</Text>
                         <View style={styles.rightAccordionArea}>
                             <View style={styles.starsContainer}>
-                                <StarIcon width={14} height={14} />
-                                <StarIcon width={14} height={14} />
-                                <StarIcon width={14} height={14} />
-                                <StarIcon width={14} height={14} />
-                                <StarIcon width={14} height={14} />
+                                {[...Array(5)].map((_, i) => <StarIcon key={i} width={14} height={14} />)}
                             </View>
                             <NextIcon width={8} height={14} />
                         </View>
@@ -109,9 +120,8 @@ export default function ProductDetailScreen({ navigation, route }) {
 
                 </View>
 
-                {/* Bottom Basket Button */}
                 <View style={styles.buttonContainer}>
-                    <ButtonComponent title="Add To Basket" onPress={() => {}} />
+                    <ButtonComponent title="Add To Basket" onPress={handleAddToCart} />
                 </View>
 
             </ScrollView>
@@ -120,13 +130,12 @@ export default function ProductDetailScreen({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
+    container: { flex: 1, 
+        backgroundColor: '#fff' 
     },
-    scrollContent: {
-        flexGrow: 1,
-        paddingBottom: 20,
+    scrollContent: { 
+        flexGrow: 1, 
+        paddingBottom: 20 
     },
     imageBackground: {
         backgroundColor: '#F2F3F2',
@@ -136,126 +145,126 @@ const styles = StyleSheet.create({
         paddingTop: 15,
         paddingHorizontal: 25,
     },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+    header: { 
+        flexDirection: 'row', 
+        justifyContent: 'space-between', 
+        alignItems: 'center' 
     },
-    iconButton: {
-        padding: 5,
+    iconButton: { 
+        padding: 5 
     },
-    productImageContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingBottom: 20,
+    productImageContainer: { 
+        flex: 1, 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        paddingBottom: 20 
     },
-    productImage: {
-        width: 329,
-        height: 199,
+    productImage: { 
+        width: 329, 
+        height: 199 
     },
-    infoContainer: {
-        paddingHorizontal: 25,
-        paddingTop: 30,
-        flex: 1,
+    infoContainer: { 
+        paddingHorizontal: 25, 
+        paddingTop: 30, 
+        flex: 1 
     },
-    titleRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+    titleRow: { 
+        flexDirection: 'row', 
+        justifyContent: 'space-between', 
+        alignItems: 'center' 
     },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#181725',
-        fontFamily: 'Gilroy',
+    title: { 
+        fontSize: 24, 
+        fontWeight: 'bold', 
+        color: '#181725', 
+        fontFamily: 'Gilroy' 
     },
-    subTitle: {
-        fontSize: 16,
-        color: '#7C7C7C',
-        fontFamily: 'Gilroy',
-        marginTop: 5,
-        marginBottom: 30,
+    subTitle: { 
+        fontSize: 16, 
+        color: '#7C7C7C', 
+        fontFamily: 'Gilroy', 
+        marginTop: 5, 
+        marginBottom: 30 
     },
-    priceRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 30,
+    priceRow: { 
+        flexDirection: 'row', 
+        justifyContent: 'space-between', 
+        alignItems: 'center', 
+        marginBottom: 30 
     },
-    quantityController: {
-        flexDirection: 'row',
-        alignItems: 'center',
+    quantityController: { 
+        flexDirection: 'row', 
+        alignItems: 'center' 
     },
     quantityBox: {
-        width: 45,
-        height: 45,
+        width: 45, 
+        height: 45, 
         borderRadius: 17,
-        borderWidth: 1,
+        borderWidth: 1, 
         borderColor: '#E2E2E2',
-        justifyContent: 'center',
-        alignItems: 'center',
+        justifyContent: 'center', 
+        alignItems: 'center', 
         marginHorizontal: 15,
     },
-    quantityText: {
-        fontSize: 18,
-        fontWeight: '600',
-        color: '#181725',
-        fontFamily: 'Gilroy',
+    quantityText: { 
+        fontSize: 18, 
+        fontWeight: '600', 
+        color: '#181725', 
+        fontFamily: 'Gilroy' 
     },
-    price: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#181725',
-        fontFamily: 'Gilroy',
+    price: { 
+        fontSize: 24, 
+        fontWeight: 'bold', 
+        color: '#181725', 
+        fontFamily: 'Gilroy' 
     },
-    divider: {
-        height: 1,
-        backgroundColor: '#E2E2E2',
-        width: '100%',
-        marginVertical: 18,
+    divider: { 
+        height: 1, 
+        backgroundColor: '#E2E2E2', 
+        width: '100%', 
+        marginVertical: 18 
     },
-    accordionHeader: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+    accordionHeader: { 
+        flexDirection: 'row', 
+        justifyContent: 'space-between', 
+        alignItems: 'center' 
     },
-    accordionTitle: {
-        fontSize: 16,
-        fontWeight: '600',
-        color: '#181725',
-        fontFamily: 'Gilroy',
+    accordionTitle: { 
+        fontSize: 16, 
+        fontWeight: '600', 
+        color: '#181725', 
+        fontFamily: 'Gilroy' 
     },
-    accordionContent: {
-        fontSize: 13,
-        color: '#7C7C7C',
-        fontFamily: 'Gilroy',
-        lineHeight: 21,
-        marginTop: 10,
+    accordionContent: { 
+        fontSize: 13, 
+        color: '#7C7C7C', 
+        fontFamily: 'Gilroy', 
+        lineHeight: 21, 
+        marginTop: 10 
     },
-    rightAccordionArea: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 15,
+    rightAccordionArea: { 
+        flexDirection: 'row', 
+        alignItems: 'center', 
+        gap: 15 
     },
-    nutritionBadge: {
-        backgroundColor: '#EBEBEB',
-        paddingVertical: 3,
-        paddingHorizontal: 8,
-        borderRadius: 5,
+    nutritionBadge: { 
+        backgroundColor: '#EBEBEB', 
+        paddingVertical: 3, 
+        paddingHorizontal: 8, 
+        borderRadius: 5 
     },
-    nutritionBadgeText: {
-        color: '#7C7C7C',
-        fontSize: 9,
-        fontWeight: '600',
-        fontFamily: 'Gilroy',
+    nutritionBadgeText: { 
+        color: '#7C7C7C', 
+        fontSize: 9, 
+        fontWeight: '600', 
+        fontFamily: 'Gilroy' 
     },
-    starsContainer: {
-        flexDirection: 'row',
-        gap: 4,
+    starsContainer: { 
+        flexDirection: 'row', 
+        gap: 4 
     },
-    buttonContainer: {
-        marginTop: 30,
-        width: '100%',
-    }
+    buttonContainer: { 
+        marginTop: 30, 
+        width: '100%' 
+    },
 });

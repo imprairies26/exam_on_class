@@ -1,4 +1,3 @@
-import React from 'react';
 import { View, Text } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -18,6 +17,10 @@ import HomeScreen from '../screens/HomeScreen';
 import ProductDetailScreen from '../screens/ProductDetailScreen';
 import ExploreScreen from '../screens/ExploreScreen';
 import BeveragesScreens from '../screens/BeveragesScreens';
+import SearchScreens from '../screens/SearchScreens';
+import FilterScreens from '../screens/FilterScreens';
+import MyCartScreen from '../screens/MyCartScreen';
+import FavouriteScreen from '../screens/FavouriteScreen';
 
 // Tab Icons
 import ShopIcon from '../../assets/icon/shop-icon.svg';
@@ -30,6 +33,8 @@ const AuthStack = createNativeStackNavigator();
 const MainTab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
 const ExploreStack = createNativeStackNavigator();
+const CartStack = createNativeStackNavigator();
+const FavouriteStack = createNativeStackNavigator();
 const RootStack = createNativeStackNavigator();
 
 function HomeStackNavigator() {
@@ -37,6 +42,8 @@ function HomeStackNavigator() {
         <HomeStack.Navigator screenOptions={{ headerShown: false }}>
             <HomeStack.Screen name="HomeMain" component={HomeScreen} />
             <HomeStack.Screen name="ProductDetail" component={ProductDetailScreen} />
+            <HomeStack.Screen name="Search" component={SearchScreens} />
+            <HomeStack.Screen name="Filter" component={FilterScreens} />
         </HomeStack.Navigator>
     );
 }
@@ -46,7 +53,26 @@ function ExploreStackNavigator() {
         <ExploreStack.Navigator screenOptions={{ headerShown: false }}>
             <ExploreStack.Screen name="ExploreMain" component={ExploreScreen} />
             <ExploreStack.Screen name="Beverages" component={BeveragesScreens} />
+            <ExploreStack.Screen name="ProductDetail" component={ProductDetailScreen} />
+            <ExploreStack.Screen name="Search" component={SearchScreens} />
+            <ExploreStack.Screen name="Filter" component={FilterScreens} />
         </ExploreStack.Navigator>
+    );
+}
+
+function CartStackNavigator() {
+    return (
+        <CartStack.Navigator screenOptions={{ headerShown: false }}>
+            <CartStack.Screen name="MyCartMain" component={MyCartScreen} />
+        </CartStack.Navigator>
+    );
+}
+
+function FavouriteStackNavigator() {
+    return (
+        <FavouriteStack.Navigator screenOptions={{ headerShown: false }}>
+            <FavouriteStack.Screen name="FavouriteMain" component={FavouriteScreen} />
+        </FavouriteStack.Navigator>
     );
 }
 
@@ -94,8 +120,8 @@ function MainTabNavigator() {
         >
             <MainTab.Screen name="Shop" component={HomeStackNavigator} />
             <MainTab.Screen name="Explore" component={ExploreStackNavigator} />
-            <MainTab.Screen name="Cart" component={EmptyScreen} />
-            <MainTab.Screen name="Favourite" component={EmptyScreen} />
+            <MainTab.Screen name="Cart" component={CartStackNavigator} />
+            <MainTab.Screen name="Favourite" component={FavouriteStackNavigator} />
             <MainTab.Screen name="Account" component={EmptyScreen} />
         </MainTab.Navigator>
     );

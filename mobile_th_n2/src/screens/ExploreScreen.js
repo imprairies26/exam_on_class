@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, StatusBar, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import SearchIcon from '../../assets/icon/search-icon.svg';
 import ExploreCardComponent from '../components/ExploreCardComponent';
+import SearchBarComponent from '../components/SearchBarComponent';
 
 export default function ExploreScreen({ navigation }) {
     const [searchQuery, setSearchQuery] = useState('');
@@ -25,18 +25,16 @@ export default function ExploreScreen({ navigation }) {
                 <Text style={styles.title}>Find Products</Text>
             </View>
 
-            <View style={styles.searchWrapper}>
-                <View style={styles.searchBar}>
-                    <SearchIcon width={18} height={18} style={{ marginRight: 10 }} />
-                    <TextInput 
-                        style={styles.searchInput}
-                        placeholder="Search Store"
-                        placeholderTextColor="#7C7C7C"
-                        value={searchQuery}
-                        onChangeText={setSearchQuery}
-                    />
-                </View>
-            </View>
+            <SearchBarComponent 
+                placeholder="Search Store"
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+                onSubmitEditing={() => {
+                    if (searchQuery.trim().length > 0) {
+                        navigation.navigate('Search', { query: searchQuery });
+                    }
+                }}
+            />
 
             <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
                 <View style={styles.gridContainer}>
@@ -70,26 +68,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#181725',
         fontFamily: 'Gilroy',
-    },
-    searchWrapper: {
-        alignItems: 'center',
-        marginBottom: 20,
-    },
-    searchBar: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#F2F3F2',
-        width: 364,
-        height: 51,
-        borderRadius: 15,
-        paddingHorizontal: 15,
-    },
-    searchInput: {
-        flex: 1,
-        fontSize: 14,
-        color: '#181725',
-        fontFamily: 'Gilroy',
-        fontWeight: '600',
     },
     scrollContent: {
         flexGrow: 1,

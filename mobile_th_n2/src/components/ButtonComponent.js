@@ -1,6 +1,6 @@
 import { Text, TouchableOpacity, StyleSheet, View } from 'react-native';
 
-export default function ButtonComponent({ title, onPress, backgroundColor, icon, textColor }) {
+export default function ButtonComponent({ title, onPress, backgroundColor, icon, textColor, price = null }) {
     return (
         <TouchableOpacity 
             style={[styles.button, backgroundColor && { backgroundColor }]} 
@@ -11,6 +11,11 @@ export default function ButtonComponent({ title, onPress, backgroundColor, icon,
                 <Text style={[styles.buttonText, textColor && { color: textColor }]}>
                     {title}
                 </Text>
+                {price && (
+                    <View style={styles.priceContainer}>
+                        <Text style={styles.priceText}>{price}</Text>
+                    </View>
+                )}
             </View>
         </TouchableOpacity>
     );
@@ -41,5 +46,18 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 18,
         fontWeight: '600',
+    },
+    priceContainer: {
+        position: 'absolute',
+        right: 20,
+        backgroundColor: '#489E67',
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        borderRadius: 4,
+    },
+    priceText: {
+        color: '#fff',
+        fontWeight: '600',
+        fontSize: 12,
     },
 });
