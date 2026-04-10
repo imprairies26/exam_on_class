@@ -1,55 +1,106 @@
-Hoàn thành các màn hình sau: https://prnt.sc/y_gyMT-xafJw
+# 🛒 Online Groceries App - UI Implementation
 
-Theo thiết kế figma: https://www.figma.com/file/YJEth2cXrP27TFQMHVolYV/Online-Groceries-App-UI-(Community)?type=design&node-id=1-2&mode=design&t=a3qv9lcMb0Lpv4gL-0
+🔗 **Figma Design:** [Online Groceries App UI (Community)](<https://www.figma.com/file/YJEth2cXrP27TFQMHVolYV/Online-Groceries-App-UI-(Community)?type=design&node-id=1-2&mode=design&t=a3qv9lcMb0Lpv4gL-0>)
 
-thực hành ngày 4: 
-Hoàn thành các màn hình sau: https://prnt.sc/4Ir7kSWd9x_d
-- Checkout
-- Order accepted
-- Error
-- Account
-Theo thiết kế figma: https://www.figma.com/design/YJEth2cXrP27TFQMHVolYV/Online-Groceries-App-UI--Community-?node-id=1-2&p=f&t=gfsVUetYfKlHn0Q8-0
+---
 
-Output:
+**THÔNG TIN CÁ NHÂN:**
 
-    Link git repo.
-    Ảnh chụp màn hình kết quả từng screen. (Để trong file README.md kèm theo thông tin cá nhân)
-    Hoàn thiện vàn nộp bài đúng hạn.
+- **Họ và tên:** Nguyễn Hồng Đăng
+- **Mã sinh viên:** 23810310039
+- **Lớp** D18CNPM1
 
-result ngày 4:
-![alt text](image-18.png) ![alt text](image-19.png) ![alt text](image-20.png) ![alt text](image-21.png)
+---
 
-thực hành ngày 3: 
-Hoàn thành các màn hình sau: https://prnt.sc/s4bECEoNXLyn
-- Search
-- Filter
-- MyCart
-- Favorites
-Theo thiết kế figma: https://www.figma.com/file/YJEth2cXrP27TFQMHVolYV/Online-Groceries-App-UI-(Community)?type=design&node-id=1-2&mode=design&t=a3qv9lcMb0Lpv4gL-0
+## CÁC GIAI ĐOẠN THỰC HÀNH (TIẾN ĐỘ)
 
-Yêu cầu:
+### Ngày 4: Hoàn thiện tính năng thanh toán & Account
 
-    Tải danh sách sản phẩm từ file "data.js" lưu trữ cấu trúc json danh sách sản phẩm.
-    Khi người dùng tìm kiếm thì sử dụng javascript để tìm kiếm trong danh sách để hiển thị.
+_Tham khảo yêu cầu tính năng: [Image Requirements](https://prnt.sc/4Ir7kSWd9x_d)_
 
-result ngày 3:
-![alt text](image-14.png) ![alt text](image-15.png) ![alt text](image-16.png) ![alt text](image-17.png)
+**Nhiệm vụ - Xây dựng các màn hình:**
 
-Thực hành ngày 2:
-Hoàn thành các màn hình sau: Home Screen, Product Detail, Explore, Beverages
-https://prnt.sc/2o5-0Se9VjDu
+- **Checkout** (Xác nhận đơn hàng mở dạng khung Pop-up).
+- **Order Accepted** (Xác nhận Đơn hàng gửi đi thành công).
+- **Error** (Hiển thị Lỗi thao tác / Hoặc cảnh báo khi tổng giỏ hàng <= 0).
+- **Account** (Tài khoản người dùng, tích hợp đăng xuất để clear App Data và Storage).
 
-Theo thiết kế figma: https://www.figma.com/file/YJEth2cXrP27TFQMHVolYV/Online-Groceries-App-UI-(Community)?type=design&node-id=1-2&mode=design&t=a3qv9lcMb0Lpv4gL-0
+**Hiển thị kết quả (Screenshots):**
 
-result ngày 2:
-![alt text](image-8.png) ![alt text](image-9.png) ![alt text](image-10.png) ![alt text](image-11.png) ![alt text](image-12.png) ![alt text](image-13.png)
+<p align="center">
+  <img src="image-18.png" width="23%" />
+  <img src="image-19.png" width="23%" />
+  <img src="image-20.png" width="23%" />
+  <img src="image-21.png" width="23%" />
+</p>
 
-- result ngày 1:
-  ![alt text](image.png)
-  ![alt text](image-1.png)
-  ![alt text](image-2.png)
-  ![alt text](image-3.png)
-  ![alt text](image-4.png)
-  ![alt text](image-5.png)
-  ![alt text](image-6.png)
-  ![alt text](image-7.png)
+---
+
+### Ngày 3: Tìm kiếm, Lọc & Quản lý Giỏ hàng/Yêu thích
+
+_Tham khảo yêu cầu tính năng: [Image Requirements](https://prnt.sc/s4bECEoNXLyn)_
+
+**Nhiệm vụ - Xây dựng các tính năng & màn hình:**
+
+- **Search System** (Tìm kiếm sản phẩm).
+- **Filter Screens** (Bộ lọc cho sản phẩm).
+- **My Cart** (Giỏ hàng người dùng).
+- **Favorites** (Kho lưu lại danh sách yêu thích).
+
+**Yêu cầu đặc biệt:**
+Tải danh sách sản phẩm từ tệp cấu trúc JSON `data.js`. Sử dụng Javascript xử lý mảng (danh sách) để thực hiện tính năng tìm kiếm, tìm nội dung chuỗi (string) và hiển thị động theo từ khóa của người dùng đã gõ.
+
+**Hiển thị kết quả (Screenshots):**
+
+<p align="center">
+  <img src="image-14.png" width="23%" />
+  <img src="image-15.png" width="23%" />
+  <img src="image-16.png" width="23%" />
+  <img src="image-17.png" width="23%" />
+</p>
+
+---
+
+### Ngày 2: Trang chủ, Khám phá & Chi tiết sản phẩm
+
+_Tham khảo yêu cầu tính năng: [Image Requirements](https://prnt.sc/2o5-0Se9VjDu)_
+
+**Nhiệm vụ - Xây dựng các màn hình:**
+
+- **Home Screen** (Trang chủ hiển thị danh sách).
+- **Product Detail** (Hiển thị Chi tiết và Mô tả sản phẩm).
+- **Explore Main** (Tab khám phá danh mục hàng hóa chung).
+- **Beverages Screens** (Danh mục con của nhóm Nước giải khát).
+
+**Hiển thị kết quả (Screenshots):**
+
+<p align="center">
+  <img src="image-8.png" width="30%" />
+  <img src="image-9.png" width="30%" />
+  <img src="image-10.png" width="30%" />
+  <img src="image-11.png" width="30%" />
+  <img src="image-12.png" width="30%" />
+  <img src="image-13.png" width="30%" />
+</p>
+
+---
+
+### Ngày 1: Đăng nhập & Xác thực (Auth)
+
+_Tham khảo yêu cầu sơ bộ: [Image Requirements](https://prnt.sc/y_gyMT-xafJw)_
+
+**Nhiệm vụ - Xây dựng luồng đăng nhập:**
+Xây dựng luồng Auth Navigation với bao gồm các màn Splashes, Onboarding, SignIn, SignUp, Location, và Verification...
+
+**Hiển thị kết quả (Screenshots):**
+
+<p align="center">
+  <img src="image.png" width="23%" />
+  <img src="image-1.png" width="23%" />
+  <img src="image-2.png" width="23%" />
+  <img src="image-3.png" width="23%" />
+  <img src="image-4.png" width="23%" />
+  <img src="image-5.png" width="23%" />
+  <img src="image-6.png" width="23%" />
+  <img src="image-7.png" width="23%" />
+</p>
