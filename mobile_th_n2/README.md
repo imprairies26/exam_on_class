@@ -2,6 +2,22 @@ Hoàn thành các màn hình sau: https://prnt.sc/y_gyMT-xafJw
 
 Theo thiết kế figma: https://www.figma.com/file/YJEth2cXrP27TFQMHVolYV/Online-Groceries-App-UI-(Community)?type=design&node-id=1-2&mode=design&t=a3qv9lcMb0Lpv4gL-0
 
+thực hành ngày 4: 
+Hoàn thành các màn hình sau: https://prnt.sc/4Ir7kSWd9x_d
+- Checkout
+- Order accepted
+- Error
+- Account
+Theo thiết kế figma: https://www.figma.com/design/YJEth2cXrP27TFQMHVolYV/Online-Groceries-App-UI--Community-?node-id=1-2&p=f&t=gfsVUetYfKlHn0Q8-0
+
+Output:
+
+    Link git repo.
+    Ảnh chụp màn hình kết quả từng screen. (Để trong file README.md kèm theo thông tin cá nhân)
+    Hoàn thiện vàn nộp bài đúng hạn.
+
+result ngày 4:
+![alt text](image-18.png) ![alt text](image-19.png) ![alt text](image-20.png) ![alt text](image-21.png)
 
 thực hành ngày 3: 
 Hoàn thành các màn hình sau: https://prnt.sc/s4bECEoNXLyn

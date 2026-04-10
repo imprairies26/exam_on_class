@@ -1,11 +1,16 @@
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MyCartComponent from '../components/MyCartComponent';
 import ButtonComponent from '../components/ButtonComponent';
 import { useAppContext } from '../context/AppContext';
+import CheckOutScreen from './CheckOutScreen';
+import ErrorScreen from './ErrorScreen';
 
 export default function MyCartScreen() {
     const { cartItems, cartTotal } = useAppContext();
+    const [isCheckoutVisible, setCheckoutVisible] = useState(false);
+    const [isErrorVisible, setErrorVisible] = useState(false);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -34,9 +39,26 @@ export default function MyCartScreen() {
                 <ButtonComponent
                     title="Go to Checkout"
                     price={cartItems.length > 0 ? `$${cartTotal.toFixed(2)}` : null}
-                    onPress={() => {}}
+                    onPress={() => {
+                        if (cartTotal <= 0) {
+                            setErrorVisible(true);
+                        } else {
+                            setCheckoutVisible(true);
+                        }
+                    }}
                 />
             </View>
+
+            <CheckOutScreen 
+                visible={isCheckoutVisible} 
+                onClose={() => setCheckoutVisible(false)} 
+                cartTotal={cartTotal} 
+            />
+
+            <ErrorScreen 
+                visible={isErrorVisible}
+                onClose={() => setErrorVisible(false)}
+            />
         </SafeAreaView>
     );
 }

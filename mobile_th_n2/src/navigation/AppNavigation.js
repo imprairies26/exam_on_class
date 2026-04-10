@@ -2,7 +2,7 @@ import { View, Text } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-// Auth Screens
+// auth screens
 import SplashScreen from '../screens/SplashScreen';
 import OnbordingScreen from '../screens/OnbordingScreen';
 import SignInScreen from '../screens/SignInScreen';
@@ -12,7 +12,7 @@ import SelectLocationScreen from '../screens/SelectLocation';
 import LoginScreen from '../screens/LoginScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 
-// Main Screens
+// main screens
 import HomeScreen from '../screens/HomeScreen';
 import ProductDetailScreen from '../screens/ProductDetailScreen';
 import ExploreScreen from '../screens/ExploreScreen';
@@ -21,8 +21,9 @@ import SearchScreens from '../screens/SearchScreens';
 import FilterScreens from '../screens/FilterScreens';
 import MyCartScreen from '../screens/MyCartScreen';
 import FavouriteScreen from '../screens/FavouriteScreen';
+import OrderAcceptedScreen from '../screens/OrderAcceptedScreen';
+import AccountScreen from '../screens/AccountScreen';
 
-// Tab Icons
 import ShopIcon from '../../assets/icon/shop-icon.svg';
 import ExploreIcon from '../../assets/icon/explore-icon.svg';
 import CartIcon from '../../assets/icon/cart-icon.svg';
@@ -122,7 +123,7 @@ function MainTabNavigator() {
             <MainTab.Screen name="Explore" component={ExploreStackNavigator} />
             <MainTab.Screen name="Cart" component={CartStackNavigator} />
             <MainTab.Screen name="Favourite" component={FavouriteStackNavigator} />
-            <MainTab.Screen name="Account" component={EmptyScreen} />
+            <MainTab.Screen name="Account" component={AccountScreen} />
         </MainTab.Navigator>
     );
 }
@@ -147,6 +148,7 @@ export default function AppNavigator() {
         <RootStack.Navigator screenOptions={{ headerShown: false }}>
             <RootStack.Screen name="Auth" component={AuthStackNavigator} />
             <RootStack.Screen name="Main" component={MainTabNavigator} />
+            <RootStack.Screen name="OrderAccepted" component={OrderAcceptedScreen} />
         </RootStack.Navigator>
     );
 }

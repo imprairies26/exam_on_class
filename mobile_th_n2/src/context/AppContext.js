@@ -6,7 +6,7 @@ export function AppContextProvider({ children }) {
     const [favourites, setFavourites] = useState([]);
     const [cartItems, setCartItems] = useState([]);
 
-    // ── FAVOURITES ─────────────────────────────────────────────────
+    // favourites ----------------------------------------------------
 
     const isFavourite = (id) => favourites.some(item => item.id === id);
 
@@ -22,7 +22,7 @@ export function AppContextProvider({ children }) {
         favourites.forEach(item => addToCart(item));
     };
 
-    // ── CART ───────────────────────────────────────────────────────
+    // cart ----------------------------------------------------------
 
     const isInCart = (id) => cartItems.some(item => item.id === id);
 
@@ -61,21 +61,27 @@ export function AppContextProvider({ children }) {
         0
     );
 
+    const clearAppData = () => {
+        setFavourites([]);
+        setCartItems([]);
+    };
+
     return (
         <AppContext.Provider
             value={{
-                // Favourites
+                // favourites
                 favourites,
                 isFavourite,
                 toggleFavourite,
                 addAllToCart,
-                // Cart
+                // cart
                 cartItems,
                 isInCart,
                 addToCart,
                 removeFromCart,
                 updateQuantity,
                 cartTotal,
+                clearAppData,
             }}
         >
             {children}
