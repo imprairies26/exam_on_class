@@ -67,6 +67,8 @@ export default function AccountScreen({ navigation }) {
                 <AccountComponent icon={HelpIcon} title="Help" />
                 <AccountComponent icon={AboutIcon} title="About" />
 
+                <AccountComponent icon={AboutIcon} title="Nguyễn Hồng Đăng - 23810310039"/>
+
                 <View style={styles.logoutContainer}>
                     <ButtonComponent 
                         title="Log Out" 
