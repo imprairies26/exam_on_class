@@ -22,10 +22,6 @@ export default function AccountScreen({ navigation }) {
     const handleLogout = async () => {
         try {
             await logout();
-            navigation.reset({
-                index: 0,
-                routes: [{ name: 'Auth', params: { screen: 'Splash' } }],
-            });
         } catch (error) {
             console.error("Error logging out", error);
         }

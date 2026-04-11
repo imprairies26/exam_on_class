@@ -175,11 +175,7 @@ export default function AppNavigator() {
                     <RootStack.Screen name="OrderAccepted" component={OrderAcceptedScreen} />
                 </>
             ) : (
-                <>
-                    <RootStack.Screen name="Auth" component={AuthStackNavigator} />
-                    <RootStack.Screen name="Main" component={MainTabNavigator} />
-                    <RootStack.Screen name="OrderAccepted" component={OrderAcceptedScreen} />
-                </>
+                <RootStack.Screen name="Auth" component={AuthStackNavigator} />
             )}
         </RootStack.Navigator>
     );
