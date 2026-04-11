@@ -3,9 +3,21 @@ import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import ButtonComponent from '../components/ButtonComponent';
 import CheckOutComponent from '../components/CheckOutComponent';
+import { useAppContext } from '../context/AppContext';
 
 export default function CheckOutScreen({ visible, onClose, cartTotal = 0 }) {
     const navigation = useNavigation();
+    const { placeOrder } = useAppContext();
+
+    const handlePlaceOrder = async () => {
+        try {
+            await placeOrder();
+            onClose();
+            navigation.navigate('OrderAccepted');
+        } catch (error) {
+            console.error('Error placing order:', error);
+        }
+    };
 
     return (
         <Modal
@@ -71,10 +83,7 @@ export default function CheckOutScreen({ visible, onClose, cartTotal = 0 }) {
                     <View style={styles.footer}>
                         <ButtonComponent 
                             title="Place Order" 
-                            onPress={() => {
-                                onClose();
-                                navigation.navigate('OrderAccepted');
-                            }} 
+                            onPress={handlePlaceOrder} 
                         />
                     </View>
                 </View>
