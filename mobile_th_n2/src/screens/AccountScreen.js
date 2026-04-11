@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet, ScrollView, StatusBar, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Feather } from '@expo/vector-icons';
 import { useAppContext } from '../context/AppContext';
 
@@ -18,18 +17,15 @@ import AboutIcon from '../../assets/icon/about-icon.svg';
 import LogoutIcon from '../../assets/icon/logout-icon.svg';
 
 export default function AccountScreen({ navigation }) {
-    const { clearAppData } = useAppContext();
+    const { user, logout } = useAppContext();
 
     const handleLogout = async () => {
         try {
-            await AsyncStorage.clear();
-            clearAppData();
-            
+            await logout();
             navigation.reset({
                 index: 0,
                 routes: [{ name: 'Auth', params: { screen: 'Splash' } }],
             });
-
         } catch (error) {
             console.error("Error logging out", error);
         }
@@ -46,19 +42,27 @@ export default function AccountScreen({ navigation }) {
                 />
                 <View style={styles.userInfo}>
                     <View style={styles.nameRow}>
-                        <Text style={styles.userName}>Afsar Hossen</Text>
+                        <Text style={styles.userName}>
+                            {user?.name || 'Guest'}
+                        </Text>
                         <TouchableOpacity hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
                             <Feather name="edit-2" size={16} color="#53B175" style={styles.editIcon} />
                         </TouchableOpacity>
                     </View>
-                    <Text style={styles.userEmail}>Imshuvo97@gmail.com</Text>
+                    <Text style={styles.userEmail}>
+                        {user?.email || 'guest@example.com'}
+                    </Text>
                 </View>
             </View>
 
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
                 <View style={styles.topBorder} />
                 
-                <AccountComponent icon={OrderIcon} title="Orders" />
+                <AccountComponent 
+                    icon={OrderIcon} 
+                    title="Orders" 
+                    onPress={() => navigation.navigate('Orders')}
+                />
                 <AccountComponent icon={MyDetailsIcon} title="My Details" />
                 <AccountComponent icon={DeliveryAddressIcon} title="Delivery Address" />
                 <AccountComponent icon={PaymentMethodIcon} title="Payment Methods" />
