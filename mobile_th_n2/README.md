@@ -1,106 +1,87 @@
-# 🛒 Online Groceries App - UI Implementation
+# Thông tin sinh viên
 
-🔗 **Figma Design:** [Online Groceries App UI (Community)](<https://www.figma.com/file/YJEth2cXrP27TFQMHVolYV/Online-Groceries-App-UI-(Community)?type=design&node-id=1-2&mode=design&t=a3qv9lcMb0Lpv4gL-0>)
+- **Họ và Tên:** Nguyễn Hồng Đăng
+- **MSSV:** 23810310039
+- **Lớp:** D18CNPM01
 
----
+# Mô tả chức năng
 
-**THÔNG TIN CÁ NHÂN:**
+Khi người dùng Login, thêm sản phẩm vào My Cart, hay thực hiện Checkout thì hệ thống sẽ đều lưu lại vào `AsyncStorage`
 
-- **Họ và tên:** Nguyễn Hồng Đăng
-- **Mã sinh viên:** 23810310039
-- **Lớp** D18CNPM1
+Thông tin đơn hàng được lưu dưới đạng JSON (nhưng không lưu lại ảnh). Sau khi người dùng mở lại app sẽ thực hiện lấy data ở `AsyncStorage` để tự động đăng nhập và hiển thị thông tin giỏ hàng, đơn hàng
 
----
+Khi lấy thông tin của đơn hàng, ứng dụng sẽ tự động mapping các trường cần thiết để khôi phục và hiển thị lại thông tin sản phẩm đầy đủ (không bao gồm ảnh lưu thô)
 
-## CÁC GIAI ĐOẠN THỰC HÀNH (TIẾN ĐỘ)
+**Chức năng mở rộng:**
 
-### Ngày 4: Hoàn thiện tính năng thanh toán & Account
+- Thêm chức năng **mã hoá dữ liệu** (với thông tin orders và user) để bảo mật
+- Thêm chức năng **tự động hết hạn login** (sau 10s hoặc 1 phút không tương tác được thiết lập trong source), sau khoảng thời gian đó user sẽ bị buộc phải login lại (chức năng logout tự động này sẽ xoá sạch hoàn toàn thông tin người dùng khỏi storage)
+- Thêm **hiệu ứng loading (Loading / Skeleton)** khi tải dữ liệu với các card sản phẩm và spinner trong khi gửi request AUTH
 
-_Tham khảo yêu cầu tính năng: [Image Requirements](https://prnt.sc/4Ir7kSWd9x_d)_
+# Hướng dẫn chạy app
 
-**Nhiệm vụ - Xây dựng các màn hình:**
+1. Đảm bảo đã thiết lập NodeJS trên máy tính, clone folder dự án về thiết bị
+2. Mở Terminal tại thư mục gốc của project (nơi có chứa file `package.json`)
+3. Chạy lệnh để thiết lập các mô đun phụ thuộc nếu chưa cài đặt:
 
-- **Checkout** (Xác nhận đơn hàng mở dạng khung Pop-up).
-- **Order Accepted** (Xác nhận Đơn hàng gửi đi thành công).
-- **Error** (Hiển thị Lỗi thao tác / Hoặc cảnh báo khi tổng giỏ hàng <= 0).
-- **Account** (Tài khoản người dùng, tích hợp đăng xuất để clear App Data và Storage).
+   npx expo@54 install
 
-**Hiển thị kết quả (Screenshots):**
+4. Khởi chạy server development bằng Expo:
 
-<p align="center">
-  <img src="image-18.png" width="23%" />
-  <img src="image-19.png" width="23%" />
-  <img src="image-20.png" width="23%" />
-  <img src="image-21.png" width="23%" />
-</p>
+   npx expo start -c
 
----
+5. Quét mã QR code xuất hiện trên terminal bằng ứng dụng **Expo Go** trên Android/iOS để trải nghiệm trực tiếp trên điện thoại thực, hoặc bấm phim tắt (ví dụ `a` cho Android emulator, `i` cho iOS simulator)
 
-### Ngày 3: Tìm kiếm, Lọc & Quản lý Giỏ hàng/Yêu thích
+# câu hỏi
 
-_Tham khảo yêu cầu tính năng: [Image Requirements](https://prnt.sc/s4bECEoNXLyn)_
+**1. AsyncStorage hoạt động như thế nào?**
 
-**Nhiệm vụ - Xây dựng các tính năng & màn hình:**
+- AsyncStorage hoạt động bằng cách lưu data vào bộ nhớ thiết bị cục bộ và khi dùng thì lấy thông tin lên để sử dụng lại
 
-- **Search System** (Tìm kiếm sản phẩm).
-- **Filter Screens** (Bộ lọc cho sản phẩm).
-- **My Cart** (Giỏ hàng người dùng).
-- **Favorites** (Kho lưu lại danh sách yêu thích).
+**2. Vì sao dùng AsyncStorage thay vì biến state?**
 
-**Yêu cầu đặc biệt:**
-Tải danh sách sản phẩm từ tệp cấu trúc JSON `data.js`. Sử dụng Javascript xử lý mảng (danh sách) để thực hiện tính năng tìm kiếm, tìm nội dung chuỗi (string) và hiển thị động theo từ khóa của người dùng đã gõ.
+- Sử dụng AsyncStorage thay cho biến state vì biến state chỉ có vòng đời tồn tại giới hạn trong lúc app đang chạy. Nếu app dừng hoạt động thì dữ liệu lưu trong biến state cũng mất
 
-**Hiển thị kết quả (Screenshots):**
+**3. So sánh với Context API:**
 
-<p align="center">
-  <img src="image-14.png" width="23%" />
-  <img src="image-15.png" width="23%" />
-  <img src="image-16.png" width="23%" />
-  <img src="image-17.png" width="23%" />
-</p>
+- AsyncStorage và Context API khác nhau chủ yếu ở lưu trữ và mục đích tiếp cận sử dụng
+- **AsyncStorage**: Thời gian lưu trữ lâu và có thể lưu tồn tại dai dẳng để lấy data sử dụng lại kể cả khi app tắt và mở lại
+- **Context API**: Hoạt động như một bản nâng cấp của biến state, là nơi lưu trữ trạng thái nằm trên RAM. Việc này giúp mọi nơi trên app khi muốn truy cập đến một dữ liệu nào đó thì chỉ việc lấy ra mà không cần phải truyền props phức tạp giữa các Component với nhau nhưng thời gian sống cũng hết khi mà kill app
 
----
+# Ảnh / Video Demo
 
-### Ngày 2: Trang chủ, Khám phá & Chi tiết sản phẩm
+### Video Demo
 
-_Tham khảo yêu cầu tính năng: [Image Requirements](https://prnt.sc/2o5-0Se9VjDu)_
+[Xem Video Demo](./ScreenShots/23010310039_01_DemoVideo.mp4)
 
-**Nhiệm vụ - Xây dựng các màn hình:**
+### Ảnh Demo Screens
 
-- **Home Screen** (Trang chủ hiển thị danh sách).
-- **Product Detail** (Hiển thị Chi tiết và Mô tả sản phẩm).
-- **Explore Main** (Tab khám phá danh mục hàng hóa chung).
-- **Beverages Screens** (Danh mục con của nhóm Nước giải khát).
+_(Dưới đây là hình ảnh toàn bộ các màn hình đã phát triển trong ứng dụng)_
 
-**Hiển thị kết quả (Screenshots):**
+| <img src="./ScreenShots/23810310039_01_splash-screen.jpg" width="250" /> | <img src="./ScreenShots/23810310039_01_onboarding-screen.jpg" width="250" /> | <img src="./ScreenShots/23810310039_03_NumberInputScreen.jpg" width="250" /> |
+| :----------------------------------------------------------------------: | :--------------------------------------------------------------------------: | :--------------------------------------------------------------------------: |
+|                              Splash Screen                               |                              Onboarding Screen                               |                             Number Input Screen                              |
 
-<p align="center">
-  <img src="image-8.png" width="30%" />
-  <img src="image-9.png" width="30%" />
-  <img src="image-10.png" width="30%" />
-  <img src="image-11.png" width="30%" />
-  <img src="image-12.png" width="30%" />
-  <img src="image-13.png" width="30%" />
-</p>
+| <img src="./ScreenShots/23810310039_04_SignInScreen.jpg" width="250" /> | <img src="./ScreenShots/23810310039_05_Verification.jpg" width="250" /> | <img src="./ScreenShots/23810310039_06_SelectLocation.jpg" width="250" /> |
+| :---------------------------------------------------------------------: | :---------------------------------------------------------------------: | :-----------------------------------------------------------------------: |
+|                             Sign In Screen                              |                           Verification Screen                           |                          Select Location Screen                           |
 
----
+| <img src="./ScreenShots/23810310039_07_LoginScreen.jpg" width="250" /> | <img src="./ScreenShots/23810310039_21_SignUpScreen.jpg" width="250" /> | <img src="./ScreenShots/23810310039_08_HomeScreen.jpg" width="250" /> |
+| :--------------------------------------------------------------------: | :---------------------------------------------------------------------: | :-------------------------------------------------------------------: |
+|                              Login Screen                              |                             Sign Up Screen                              |                              Home Screen                              |
 
-### Ngày 1: Đăng nhập & Xác thực (Auth)
+| <img src="./ScreenShots/23810310039_10_ExploreScreen.jpg" width="250" /> | <img src="./ScreenShots/23810310039_11_BeveragesScreens.jpg" width="250" /> | <img src="./ScreenShots/23810310039_12_ProductDetailScreen.jpg" width="250" /> |
+| :----------------------------------------------------------------------: | :-------------------------------------------------------------------------: | :----------------------------------------------------------------------------: |
+|                              Explore Screen                              |                              Beverages Screens                              |                             Product Detail Screen                              |
 
-_Tham khảo yêu cầu sơ bộ: [Image Requirements](https://prnt.sc/y_gyMT-xafJw)_
+| <img src="./ScreenShots/23810310039_13_FilterScreens.jpg" width="250" /> | <img src="./ScreenShots/23810310039_14_SearchScreens.jpg" width="250" /> | <img src="./ScreenShots/23810310039_15_FavouriteScreen.jpg" width="250" /> |
+| :----------------------------------------------------------------------: | :----------------------------------------------------------------------: | :------------------------------------------------------------------------: |
+|                              Filter Screens                              |                              Search Screens                              |                              Favourite Screen                              |
 
-**Nhiệm vụ - Xây dựng luồng đăng nhập:**
-Xây dựng luồng Auth Navigation với bao gồm các màn Splashes, Onboarding, SignIn, SignUp, Location, và Verification...
+| <img src="./ScreenShots/23810310039_17_MyCartScreen.jpg" width="250" /> | <img src="./ScreenShots/23810310039_18_CheckOutScreen.jpg" width="250" /> | <img src="./ScreenShots/23810310039_16_ErrorScreen.jpg" width="250" /> |
+| :---------------------------------------------------------------------: | :-----------------------------------------------------------------------: | :--------------------------------------------------------------------: |
+|                             My Cart Screen                              |                             Check Out Screen                              |                              Error Screen                              |
 
-**Hiển thị kết quả (Screenshots):**
-
-<p align="center">
-  <img src="image.png" width="23%" />
-  <img src="image-1.png" width="23%" />
-  <img src="image-2.png" width="23%" />
-  <img src="image-3.png" width="23%" />
-  <img src="image-4.png" width="23%" />
-  <img src="image-5.png" width="23%" />
-  <img src="image-6.png" width="23%" />
-  <img src="image-7.png" width="23%" />
-</p>
+| <img src="./ScreenShots/23810310039_19_OrderAcceptedScreen.jpg" width="250" /> | <img src="./ScreenShots/23810310039_20_OrdersScreen.jpg" width="250" /> | <img src="./ScreenShots/23810310039_09_AccountScreen.jpg" width="250" /> |
+| :----------------------------------------------------------------------------: | :---------------------------------------------------------------------: | :----------------------------------------------------------------------: |
+|                             Order Accepted Screen                              |                              Orders Screen                              |                              Account Screen                              |
