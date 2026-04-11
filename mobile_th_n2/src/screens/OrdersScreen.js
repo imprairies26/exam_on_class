@@ -3,9 +3,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign } from '@expo/vector-icons';
 import { useAppContext } from '../context/AppContext';
 import { TouchableOpacity } from 'react-native';
+import { OrdersSkeleton } from '../components/SkeletonLoader';
 
 export default function OrdersScreen({ navigation }) {
-    const { orders } = useAppContext();
+    const { orders, isLoadingOrders } = useAppContext();
 
     const formatDate = (isoString) => {
         const date = new Date(isoString);
@@ -63,7 +64,10 @@ export default function OrdersScreen({ navigation }) {
 
             <View style={styles.divider} />
 
-            {orders.length === 0 ? (
+            {/* skeleton loading */}
+            {isLoadingOrders ? (
+                <OrdersSkeleton count={3} />
+            ) : orders.length === 0 ? (
                 <View style={styles.emptyContainer}>
                     <AntDesign name="inbox" size={64} color="#B3B3B3" />
                     <Text style={styles.emptyText}>No orders yet</Text>
