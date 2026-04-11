@@ -25,7 +25,7 @@ export default function OrderAcceptedScreen() {
             <View style={styles.footer}>
                 <ButtonComponent 
                     title="Track Order" 
-                    onPress={() => {}} 
+                    onPress={() => navigation.navigate('Main', { screen: 'Account', params: { screen: 'Orders' } })} 
                 />
                 
                 <TouchableOpacity 
