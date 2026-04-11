@@ -1,16 +1,30 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, StatusBar, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, StatusBar, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign } from '@expo/vector-icons';
 import SmallLogo from '../../assets/icon/small-logo.svg';
 import InputComponent from '../components/InputComponent';
 import PasswordComponent from '../components/PasswordComponent';
 import ButtonComponent from '../components/ButtonComponent';
+import { useAppContext } from '../context/AppContext';
 
 export default function SignUpScreen({ navigation }) {
-    const [username, setUsername] = useState('Afsar Hossen Shuvo');
-    const [email, setEmail] = useState('imshuvo97@gmail.com');
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const { login } = useAppContext();
+
+    const handleSignUp = async () => {
+        if (!username.trim() || !email.trim() || !password.trim()) {
+            Alert.alert('Lỗi', 'Vui lòng nhập đầy đủ thông tin');
+            return;
+        }
+        try {
+            await login(email.trim(), password, username.trim());
+        } catch (error) {
+            Alert.alert('Lỗi', 'Đăng ký thất bại. Vui lòng thử lại.');
+        }
+    };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -62,7 +76,7 @@ export default function SignUpScreen({ navigation }) {
                     <View style={{ marginTop: 20 }}>
                         <ButtonComponent 
                             title="Sign Up" 
-                            onPress={() => {navigation.navigate('Login')}} 
+                            onPress={handleSignUp} 
                         />
                     </View>
 
