@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, useRef } from 'react';
 import products from '../data/data';
 import * as storageService from '../services/storageService';
+import useStorage from '../hooks/useStorage';
 
 const AppContext = createContext(null);
 
@@ -15,52 +16,70 @@ const hydrateItems = (items) =>
         .filter(Boolean);
 
 export function AppContextProvider({ children }) {
-    // -- auth ------------------------------------------------------
+    // -- useStorage hooks (custom hook) --------------------------------
+    const {
+        data: savedUser,
+        isLoading: isLoadingUser,
+        save: saveUserStorage,
+        remove: removeUserStorage,
+    } = useStorage('user', null);
+
+    const {
+        data: savedOrders,
+        isLoading: isLoadingOrders,
+        save: saveOrderStorage,
+        refresh: refreshOrders,
+    } = useStorage('orders', []);
+
+    const {
+        data: savedCart,
+        isLoading: isLoadingCart,
+    } = useStorage('cart', []);
+
+    const {
+        data: savedFavs,
+        isLoading: isLoadingFavs,
+    } = useStorage('favourites', []);
+
+    // -- auth state ----------------------------------------------------
     const [user, setUser] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
 
-    // -- data ------------------------------------------------------
+    // -- data state ----------------------------------------------------
     const [favourites, setFavourites] = useState([]);
     const [cartItems, setCartItems] = useState([]);
     const [orders, setOrders] = useState([]);
 
+    // loading total
+    const isLoading = isLoadingUser || isLoadingOrders || isLoadingCart || isLoadingFavs;
+
     // use ref to avoid persist when not loaded yet
     const initialLoadDone = useRef(false);
+    const [isAppReady, setIsAppReady] = useState(false);
 
-    // -- initialize -- load all from storage -----------------------
+    // -- restore data from useStorage when loaded ----------------
+    const hasRestoredRef = useRef(false);
+
     useEffect(() => {
-        const loadAll = async () => {
-            try {
-                const [savedUser, savedCart, savedFavs, savedOrders] = await Promise.all([
-                    storageService.getUser(),
-                    storageService.getCart(),
-                    storageService.getFavourites(),
-                    storageService.getOrders(),
-                ]);
-
-                if (savedUser) {
-                    setUser(savedUser);
-                    setIsLoggedIn(true);
-                }
-                if (savedCart && savedCart.length > 0) {
-                    setCartItems(hydrateItems(savedCart));
-                }
-                if (savedFavs && savedFavs.length > 0) {
-                    setFavourites(hydrateItems(savedFavs));
-                }
-                if (savedOrders) {
-                    setOrders(savedOrders);
-                }
-            } catch (error) {
-                console.error('Error loading data from storage:', error);
-            } finally {
-                initialLoadDone.current = true;
-                setIsLoading(false);
+        if (!isLoading && !hasRestoredRef.current) {
+            hasRestoredRef.current = true;
+            if (savedUser) {
+                setUser(savedUser);
+                setIsLoggedIn(true);
             }
-        };
-        loadAll();
-    }, []);
+            if (savedCart && savedCart.length > 0) {
+                setCartItems(hydrateItems(savedCart));
+            }
+            if (savedFavs && savedFavs.length > 0) {
+                setFavourites(hydrateItems(savedFavs));
+            }
+            if (savedOrders) {
+                setOrders(savedOrders);
+            }
+            initialLoadDone.current = true;
+            setIsAppReady(true);
+        }
+    }, [isLoading]);
 
     // -- persist cart when change --------------------------------
     useEffect(() => {
@@ -80,7 +99,7 @@ export function AppContextProvider({ children }) {
     const login = async (email, password, name) => {
         try {
             const userData = { email, password, name: name || email.split('@')[0] };
-            await storageService.saveUser(userData);
+            await saveUserStorage(userData);
             setUser(userData);
             setIsLoggedIn(true);
         } catch (error) {
@@ -166,7 +185,7 @@ export function AppContextProvider({ children }) {
                 createdAt: new Date().toISOString(),
             };
 
-            await storageService.saveOrder(order);
+            await saveOrderStorage(order);
             setOrders(prev => [order, ...prev]);
 
             // clear cart
@@ -188,6 +207,8 @@ export function AppContextProvider({ children }) {
                 user,
                 isLoggedIn,
                 isLoading,
+                isAppReady,
+                isLoadingOrders,
                 login,
                 logout,
                 // favourites
