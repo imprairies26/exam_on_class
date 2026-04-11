@@ -10,10 +10,23 @@ import CategoryComponent from '../components/CategoryComponent';
 import HomeCardComponent from '../components/HomeCardComponent';
 import GroceriesCardComponent from '../components/GroceriesCardComponent';
 import SearchBarComponent from '../components/SearchBarComponent';
+import { HomeSkeleton } from '../components/SkeletonLoader';
 import { exclusiveOffers, bestSelling, groceries } from '../data/data';
+import { useAppContext } from '../context/AppContext';
 
 export default function HomeScreen({ navigation}) {
     const [searchQuery, setSearchQuery] = useState('');
+    const { isLoading } = useAppContext();
+
+    // show skeleton when loading data
+    if (isLoading) {
+        return (
+            <SafeAreaView style={styles.container}>
+                <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+                <HomeSkeleton />
+            </SafeAreaView>
+        );
+    }
 
     return (
         <SafeAreaView style={styles.container}>
