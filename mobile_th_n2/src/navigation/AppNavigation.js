@@ -156,10 +156,9 @@ function AuthStackNavigator() {
 }
 
 export default function AppNavigator() {
-    const { isLoggedIn, isLoading } = useAppContext();
+    const { isLoggedIn, isAppReady } = useAppContext();
 
-    // loading data from async storage -> show loading
-    if (isLoading) {
+    if (!isAppReady) {
         return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#53B175' }}>
                 <ActivityIndicator size="large" color="#fff" />
