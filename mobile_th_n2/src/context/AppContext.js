@@ -1,13 +1,107 @@
-import React, { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect, useRef } from 'react';
+import products from '../data/data';
+import * as storageService from '../services/storageService';
 
 const AppContext = createContext(null);
 
+// search full info product from id
+const hydrateItems = (items) =>
+    items
+        .map(item => {
+            const full = products.find(p => p.id === item.id);
+            if (!full) return null;
+            return { ...full, ...item, picture: full.picture };
+        })
+        .filter(Boolean);
+
 export function AppContextProvider({ children }) {
+    // -- auth ------------------------------------------------------
+    const [user, setUser] = useState(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+
+    // -- data ------------------------------------------------------
     const [favourites, setFavourites] = useState([]);
     const [cartItems, setCartItems] = useState([]);
+    const [orders, setOrders] = useState([]);
 
-    // favourites ----------------------------------------------------
+    // use ref to avoid persist when not loaded yet
+    const initialLoadDone = useRef(false);
 
+    // -- initialize -- load all from storage -----------------------
+    useEffect(() => {
+        const loadAll = async () => {
+            try {
+                const [savedUser, savedCart, savedFavs, savedOrders] = await Promise.all([
+                    storageService.getUser(),
+                    storageService.getCart(),
+                    storageService.getFavourites(),
+                    storageService.getOrders(),
+                ]);
+
+                if (savedUser) {
+                    setUser(savedUser);
+                    setIsLoggedIn(true);
+                }
+                if (savedCart && savedCart.length > 0) {
+                    setCartItems(hydrateItems(savedCart));
+                }
+                if (savedFavs && savedFavs.length > 0) {
+                    setFavourites(hydrateItems(savedFavs));
+                }
+                if (savedOrders) {
+                    setOrders(savedOrders);
+                }
+            } catch (error) {
+                console.error('Error loading data from storage:', error);
+            } finally {
+                initialLoadDone.current = true;
+                setIsLoading(false);
+            }
+        };
+        loadAll();
+    }, []);
+
+    // -- persist cart when change --------------------------------
+    useEffect(() => {
+        if (initialLoadDone.current) {
+            storageService.saveCart(cartItems);
+        }
+    }, [cartItems]);
+
+    // -- persist favourites when change --------------------------
+    useEffect(() => {
+        if (initialLoadDone.current) {
+            storageService.saveFavourites(favourites);
+        }
+    }, [favourites]);
+
+    // -- auth functions -------------------------------------------
+    const login = async (email, password, name) => {
+        try {
+            const userData = { email, password, name: name || email.split('@')[0] };
+            await storageService.saveUser(userData);
+            setUser(userData);
+            setIsLoggedIn(true);
+        } catch (error) {
+            console.error('Error during login:', error);
+        }
+    };
+
+    const logout = async () => {
+        try {
+            await storageService.clearAll();
+            setUser(null);
+            setIsLoggedIn(false);
+            setFavourites([]);
+            setCartItems([]);
+            setOrders([]);
+        } catch (error) {
+            console.error('Error during logout:', error);
+        }
+    };
+
+    // -- favourites -----------------------------------------------
     const isFavourite = (id) => favourites.some(item => item.id === id);
 
     const toggleFavourite = (product) => {
@@ -22,8 +116,7 @@ export function AppContextProvider({ children }) {
         favourites.forEach(item => addToCart(item));
     };
 
-    // cart ----------------------------------------------------------
-
+    // -- cart -----------------------------------------------------
     const isInCart = (id) => cartItems.some(item => item.id === id);
 
     const addToCart = (product) => {
@@ -61,14 +154,42 @@ export function AppContextProvider({ children }) {
         0
     );
 
-    const clearAppData = () => {
-        setFavourites([]);
-        setCartItems([]);
+    // -- orders ---------------------------------------------------
+    const placeOrder = async () => {
+        try {
+            const order = {
+                id: Date.now().toString(),
+                items: cartItems.map(({ id, title, price, quantity }) => ({
+                    id, title, price, quantity,
+                })),
+                total: cartTotal.toFixed(2),
+                createdAt: new Date().toISOString(),
+            };
+
+            await storageService.saveOrder(order);
+            setOrders(prev => [order, ...prev]);
+
+            // clear cart
+            setCartItems([]);
+        } catch (error) {
+            console.error('Error placing order:', error);
+        }
+    };
+
+    // -- legacy clear (used at old version) ------------------
+    const clearAppData = async () => {
+        await logout();
     };
 
     return (
         <AppContext.Provider
             value={{
+                // auth
+                user,
+                isLoggedIn,
+                isLoading,
+                login,
+                logout,
                 // favourites
                 favourites,
                 isFavourite,
@@ -81,6 +202,10 @@ export function AppContextProvider({ children }) {
                 removeFromCart,
                 updateQuantity,
                 cartTotal,
+                // orders
+                orders,
+                placeOrder,
+                // legacy
                 clearAppData,
             }}
         >
