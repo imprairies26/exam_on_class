@@ -1,14 +1,28 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, StatusBar, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, StatusBar, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SmallLogo from '../../assets/icon/small-logo.svg';
 import InputComponent from '../components/InputComponent';
 import PasswordComponent from '../components/PasswordComponent';
 import ButtonComponent from '../components/ButtonComponent';
+import { useAppContext } from '../context/AppContext';
 
 export default function LoginScreen({ navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const { login } = useAppContext();
+
+    const handleLogin = async () => {
+        if (!email.trim() || !password.trim()) {
+            Alert.alert('Error', 'Please enter email and password');
+            return;
+        }
+        try {
+            await login(email.trim(), password);
+        } catch (error) {
+            Alert.alert('Error', 'Login failed. Please try again.');
+        }
+    };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -46,7 +60,7 @@ export default function LoginScreen({ navigation }) {
                     <View style={{ marginTop: 20 }}>
                         <ButtonComponent 
                             title="Log In" 
-                            onPress={() => navigation.navigate('Main')} 
+                            onPress={handleLogin} 
                         />
                     </View>
 
