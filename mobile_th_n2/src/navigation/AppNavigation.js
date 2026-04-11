@@ -1,6 +1,7 @@
-import { View, Text } from 'react-native';
+import { View, Text, ActivityIndicator } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useAppContext } from '../context/AppContext';
 
 // auth screens
 import SplashScreen from '../screens/SplashScreen';
@@ -23,6 +24,7 @@ import MyCartScreen from '../screens/MyCartScreen';
 import FavouriteScreen from '../screens/FavouriteScreen';
 import OrderAcceptedScreen from '../screens/OrderAcceptedScreen';
 import AccountScreen from '../screens/AccountScreen';
+import OrdersScreen from '../screens/OrdersScreen';
 
 import ShopIcon from '../../assets/icon/shop-icon.svg';
 import ExploreIcon from '../../assets/icon/explore-icon.svg';
@@ -36,6 +38,7 @@ const HomeStack = createNativeStackNavigator();
 const ExploreStack = createNativeStackNavigator();
 const CartStack = createNativeStackNavigator();
 const FavouriteStack = createNativeStackNavigator();
+const AccountStack = createNativeStackNavigator();
 const RootStack = createNativeStackNavigator();
 
 function HomeStackNavigator() {
@@ -74,6 +77,15 @@ function FavouriteStackNavigator() {
         <FavouriteStack.Navigator screenOptions={{ headerShown: false }}>
             <FavouriteStack.Screen name="FavouriteMain" component={FavouriteScreen} />
         </FavouriteStack.Navigator>
+    );
+}
+
+function AccountStackNavigator() {
+    return (
+        <AccountStack.Navigator screenOptions={{ headerShown: false }}>
+            <AccountStack.Screen name="AccountMain" component={AccountScreen} />
+            <AccountStack.Screen name="Orders" component={OrdersScreen} />
+        </AccountStack.Navigator>
     );
 }
 
@@ -123,7 +135,7 @@ function MainTabNavigator() {
             <MainTab.Screen name="Explore" component={ExploreStackNavigator} />
             <MainTab.Screen name="Cart" component={CartStackNavigator} />
             <MainTab.Screen name="Favourite" component={FavouriteStackNavigator} />
-            <MainTab.Screen name="Account" component={AccountScreen} />
+            <MainTab.Screen name="Account" component={AccountStackNavigator} />
         </MainTab.Navigator>
     );
 }
@@ -144,11 +156,31 @@ function AuthStackNavigator() {
 }
 
 export default function AppNavigator() {
+    const { isLoggedIn, isLoading } = useAppContext();
+
+    // loading data from async storage -> show loading
+    if (isLoading) {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#53B175' }}>
+                <ActivityIndicator size="large" color="#fff" />
+            </View>
+        );
+    }
+
     return (
         <RootStack.Navigator screenOptions={{ headerShown: false }}>
-            <RootStack.Screen name="Auth" component={AuthStackNavigator} />
-            <RootStack.Screen name="Main" component={MainTabNavigator} />
-            <RootStack.Screen name="OrderAccepted" component={OrderAcceptedScreen} />
+            {isLoggedIn ? (
+                <>
+                    <RootStack.Screen name="Main" component={MainTabNavigator} />
+                    <RootStack.Screen name="OrderAccepted" component={OrderAcceptedScreen} />
+                </>
+            ) : (
+                <>
+                    <RootStack.Screen name="Auth" component={AuthStackNavigator} />
+                    <RootStack.Screen name="Main" component={MainTabNavigator} />
+                    <RootStack.Screen name="OrderAccepted" component={OrderAcceptedScreen} />
+                </>
+            )}
         </RootStack.Navigator>
     );
 }
