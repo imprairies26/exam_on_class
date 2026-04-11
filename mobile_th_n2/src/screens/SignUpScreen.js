@@ -16,13 +16,13 @@ export default function SignUpScreen({ navigation }) {
 
     const handleSignUp = async () => {
         if (!username.trim() || !email.trim() || !password.trim()) {
-            Alert.alert('Lỗi', 'Vui lòng nhập đầy đủ thông tin');
+            Alert.alert('Error', 'Please enter your information');
             return;
         }
         try {
             await login(email.trim(), password, username.trim());
         } catch (error) {
-            Alert.alert('Lỗi', 'Đăng ký thất bại. Vui lòng thử lại.');
+            Alert.alert('Error', 'Sign up failed. Please try again.');
         }
     };
 
