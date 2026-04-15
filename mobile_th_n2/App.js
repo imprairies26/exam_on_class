@@ -6,7 +6,7 @@ import { AppContextProvider, useAppContext } from './src/context/AppContext';
 import useInactivityTimeout from './src/hooks/useInactivityTimeout';
 
 // time for auto logout
-const INACTIVITY_TIMEOUT = 60 * 1000; // 1 minute
+const INACTIVITY_TIMEOUT = 10 * 1000; // 10 seconds
 
 function InactivityWrapper({ children }) {
     const { isLoggedIn, logout } = useAppContext();
@@ -14,7 +14,7 @@ function InactivityWrapper({ children }) {
     const handleTimeout = () => {
         Alert.alert(
             'Your login session has expired',
-            'You not interacted for 1 minute. Please log in again.',
+            'You not interacted for 10 sec. Please log in again.',
             [{ text: 'OK' }]
         );
         logout();
